@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite --open",
+    "dev:ssr": "cross-env NODE_ENV=development node server",
+    "prod:ssr": "cross-env NODE_ENV=production node server",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
@@ -19,6 +21,7 @@
     "@vitejs/plugin-legacy": "^5.4.1",
     "@vueuse/core": "^10.10.0",
     "axios": "^1.7.2",
+    "cross-env": "^7.0.3",
     "element-plus": "^2.7.3",
     "eslint": "^9.3.0",
     "express": "^4.19.2",

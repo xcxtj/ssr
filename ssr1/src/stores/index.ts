@@ -66,22 +66,25 @@ export const useSSRStore = defineStore("ssr", {
           pageSize: this.pageSize,
           cityCode,
         };
-        let { success, result } = await fetchRoomList(params);
-        const orders = result.orders;
-        const total = result.total;
-        if (success) {
-          this.total = total;
-          this.setRoomList(orders.data);
-          resolve(true);
-        }
+        fetchRoomList(params).then((res) => {
+          let { success, result } = res;
+          const orders = result.orders;
+          const total = result.total;
+          if (success) {
+            this.setRoomList(orders.data);
+            this.total = total;
+            resolve(true);
+          }
+        });
       });
     },
+
     async getRoomDetail(payload: IRoomDetailParams) {
       return new Promise(async (resolve, reject) => {
         let { success, result } = await fetchRoomDetail(payload);
         if (success) {
           console.log("详情页数据保存到Vuex中");
-          this.setRoomDetail(result)
+          this.setRoomDetail(result);
           resolve(true);
         }
       });

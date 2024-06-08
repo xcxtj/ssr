@@ -56,7 +56,8 @@ import { useI18n } from "vue-i18n";
 import { ref, getCurrentInstance } from "vue";
 import { userLogoutApi } from "@/api/login";
 import { defineAsyncComponent } from "vue";
-const pop=defineAsyncComponent(()=>import("@/views/order/pop.vue"))
+import type { IResultOr } from "@/api/interface";
+const pop = defineAsyncComponent(() => import("@/views/order/pop.vue"));
 const { proxy }: any = getCurrentInstance();
 const { t, locale } = useI18n();
 const router = useRouter();
@@ -81,16 +82,19 @@ function handleselect(e: any) {
   }
 }
 const userLogout = async () => {
-  let { success, message } = await userLogoutApi();
-  if (success) {
-    proxy.$message.success("退出成功");
-    router.push({ name: "login" });
-    // localStorage.setItem("userStatus", "0");
-    store.setUserStatus(0);
-    localStorage.setItem("userId", "");
-  } else {
-    proxy.$message.error("退出失败");
-  }
+  userLogoutApi().then((res: IResultOr) => {
+    let { success, message } = res;
+    if (success) {
+      proxy.$message.success("退出成功");
+      router.push({ name: "login" });
+      // localStorage.setItem("userStatus", "0");
+      store.setUserStatus(0);
+      localStorage.setItem("userId", "");
+    } else {
+      store.setUserStatus(0);
+      proxy.$message.error(message);
+    }
+  });
 };
 </script>
 

@@ -69,6 +69,5 @@ const submitForm = () => {
       return false;
     }
   });
-  if(res) router.push('/')
 };
 </script>

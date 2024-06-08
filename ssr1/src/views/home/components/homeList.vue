@@ -28,6 +28,8 @@ import { storeToRefs } from "pinia";
 const store = useSSRStore();
 const router = useRouter();
 const { roomList } = storeToRefs(store);
+console.log(roomList.value);
+
 function toDetail(item: any) {
   const { id } = item;
   router.push({ path: `/roomDetail/${id}` });

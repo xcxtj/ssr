@@ -34,6 +34,7 @@ router.isReady().then(() => {
     if (!actived.length) {
       return next();
     }
+    // 对所有匹配的路由组件调用 `asyncData()`
     asyncDataFilter(actived, store, router.currentRoute).then(function () {
       // 结束loading
       next();
@@ -41,4 +42,25 @@ router.isReady().then(() => {
   });
 
   app.mount("#app");
+});
+// 实现在不刷新的路由跳转下也能匹配mate信息
+//SEO优化
+router.afterEach((to, from, next) => {
+  const { roomDetail } = store;
+  const { title: roomTitle = "", owner } = roomDetail || {};
+  const { introduce = "" } = owner || {};
+  const { meta } = to;
+  const { title, keywords, description } = meta;
+  if (title) {
+    document.title = `${title}${roomTitle}`;
+  } else {
+    document.title = "";
+  }
+  const keywordsMeta = document.querySelector('meta[name="keywords"]')
+  keywordsMeta && keywordsMeta.setAttribute("content",`${keywords}${introduce}`)
+
+  const descriptionMeta = document.querySelector('meta[name="description"]')
+  descriptionMeta?.setAttribute("content",`${description}${introduce}`)
+
+
 });
